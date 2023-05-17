@@ -1,9 +1,9 @@
 from fastapi import FastAPI
-import model
-from config import engine
-from router import router
+import model.bookModel as bookModel
+from config.bookConfig import engine
+from router.bookRouter import router
 
-model.Base.metadata.create_all(bind=engine)
+bookModel.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
