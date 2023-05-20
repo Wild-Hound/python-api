@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
+from log.main import logCritical, logInfo
 
 DATABASE_URL = "postgresql://postgres:pass@localhost:5432/url_shortener"
 
