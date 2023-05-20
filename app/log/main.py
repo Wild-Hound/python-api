@@ -8,22 +8,34 @@ import logging
 
 logging.basicConfig(level=logging.DEBUG)
 
+logger = logging.getLogger("service")
+
+file_handler_error = logging.FileHandler("errorLog.log")
+file_handler_error.setLevel(logging.ERROR)
+
+file_handler_info = logging.FileHandler("infoLog.log")
+file_handler_info.setLevel(logging.DEBUG)
+
+logger.addHandler(file_handler_error)
+logger.addHandler(file_handler_info)
+
 
 def logDebug(message: str):
-    logging.debug(message)
+    logger.debug(message)
 
 
 def logInfo(message: str):
-    logging.info(message)
+    logger.info(message)
 
 
 def logWarning(message: str):
-    logging.warning(message)
+    logger.warning(message)
 
 
 def logError(message: str):
-    logging.error(message)
+    logger.error(message)
 
 
 def logCritical(message: str):
-    logging.critical(message)
+    logger.critical(message)
+    exit()
