@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime
 
 # DEBUG
 # INFO
@@ -9,12 +10,18 @@ import logging
 logging.basicConfig(level=logging.DEBUG)
 
 logger = logging.getLogger("service")
+formatter = logging.Formatter("%(asctime)s: %(levelname)s - %(message)s")
+today = datetime.today()
 
-file_handler_error = logging.FileHandler("errorLog.log")
+file_handler_error = logging.FileHandler(
+    f"log/{today.day:02d}-{today.month:02d}-{today.year}-errorLog.log")
 file_handler_error.setLevel(logging.ERROR)
+file_handler_error.setFormatter(formatter)
 
-file_handler_info = logging.FileHandler("infoLog.log")
+file_handler_info = logging.FileHandler(
+    f"log/{today.day:02d}-{today.month:02d}-{today.year}-infoLog.log")
 file_handler_info.setLevel(logging.DEBUG)
+file_handler_info.setFormatter(formatter)
 
 logger.addHandler(file_handler_error)
 logger.addHandler(file_handler_info)
