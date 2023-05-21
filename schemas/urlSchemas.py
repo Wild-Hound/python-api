@@ -8,7 +8,7 @@ T = TypeVar("T")
 
 class UrlSchema(BaseModel):
     main_url: str
-    redirect_url: str
+    redirect_url: Optional[str]
 
     class Config:
         orm_mode = True

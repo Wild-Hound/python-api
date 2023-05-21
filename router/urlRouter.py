@@ -39,6 +39,7 @@ async def get_main_url(main_url: str, db: Session = Depends(get_db)):
 @router.get("/redirect/{redirect_url}")
 async def get_main_url(redirect_url: str, response: FastResponse, db: Session = Depends(get_db)):
     _url = urlCrud.get_url_by_redirect(db, redirect_url)
+    print(_url.main_url, redirect_url)
     response.status_code = 307
-    response.headers['Location'] = _url.main_url
+    response.headers['Location'] = f"https://{_url.main_url}"
     return Response(code="200", message="Success fetch all data", result=_url)

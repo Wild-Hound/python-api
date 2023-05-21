@@ -3,6 +3,9 @@ from model.urlModel import Url
 from schemas.urlSchemas import UrlSchema
 from datetime import datetime
 
+import string
+import random
+
 
 def get_urls(db: Session, skip: int = 0, limit: int = 100):
     return db.query(Url).offset(skip).limit(limit).all()
@@ -17,6 +20,15 @@ def get_url_by_redirect(db: Session, redirect_url: int):
 
 
 def create_url(db: Session, url: UrlSchema):
+
+    if (not url.redirect_url):
+        url.redirect_url = ''.join(random.choices(string.ascii_uppercase +
+                                                  string.digits, k=8))
+
+    if (url.main_url.startswith("http://") or url.main_url.startswith("https://")):
+        url.main_url = url.main_url.replace("http://", "")
+        url.main_url = url.main_url.replace("https://", "")
+
     _url = Url(
         main_url=url.main_url,
         redirect_url=url.redirect_url,
