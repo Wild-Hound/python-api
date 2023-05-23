@@ -17,8 +17,12 @@ def get_db():
 
 
 @router.post("/create")
-async def create_url(request: RequestUrl, db: Session = Depends(get_db)):
-    urlCrud.create_url(db, url=request.parameter)
+async def create_url(request: RequestUrl, response: FastResponse, db: Session = Depends(get_db)):
+    res = urlCrud.create_url(db, url=request.parameter)
+    if not res:
+        response.status_code = 400
+
+        return Response(code="200",message="exists").dict(exclude_none=True)
     return Response(
         code="200",
         message="Url created successfully").dict(exclude_none=True)

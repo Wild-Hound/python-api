@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+from sqlalchemy import exc
 from model.urlModel import Url
 from schemas.urlSchemas import UrlSchema
 from datetime import datetime
@@ -29,14 +30,27 @@ def create_url(db: Session, url: UrlSchema):
         url.main_url = url.main_url.replace("http://", "")
         url.main_url = url.main_url.replace("https://", "")
 
-    _url = Url(
-        main_url=url.main_url,
-        redirect_url=url.redirect_url,
-        views=0,
-        edits=0,
-        created=datetime.now()
-    )
-    db.add(_url)
-    db.commit()
-    db.refresh(_url)
-    return _url
+    try:
+        _url = Url(
+            main_url=url.main_url,
+            redirect_url=url.redirect_url,
+            views=0,
+            edits=0,
+            created=datetime.now()
+        )
+        db.add(_url)
+        db.commit()
+        db.refresh(_url)
+        return _url
+
+    except exc.IntegrityError as e:
+        e = str(e)
+        detail_start = e.find("DETAIL:") + len("DETAIL:")
+        detail_end = e.find("\n", detail_start)
+
+        detail_value = e[detail_start:detail_end].strip()
+        print(detail_value)
+        print(e)
+
+        return detail_value
+    
