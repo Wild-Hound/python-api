@@ -1,0 +1,36 @@
+image: python:latest
+
+cache:
+  paths:
+    - .cache/pip
+    - venv/
+
+before_script:
+  - python --version ; pip --version # For debugging
+  - pip install virtualenv
+  - virtualenv venv
+  - source venv/bin/activate
+
+stages: # List of stages for jobs, and their order of execution
+  - deploy
+
+dev-deploy-job: # This job runs in the deploy stage.
+  stage: deploy
+  script:
+    - echo "Deploying application to dev server..."
+    - mkdir -p ~/.ssh
+    - echo "$DEV_DO_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+    - cat ~/.ssh/id_rsa
+    - chmod 700 ~/.ssh/id_rsa
+    - eval "$(ssh-agent -s)"
+    - ssh-add ~/.ssh/id_rsa
+    - ssh-keyscan -H 'gitlab.com' >> ~/.ssh/known_hosts
+    - chmod +x ./ci_scripts/deploy.sh
+    # - scp  -o StrictHostKeyChecking=no -r ./.env.test ./.env.test.db ./.env.test.bkp ./docker-compose.dev.yml root@$DEV_DO_IP_ADDRESS:~/beaver_app
+    - bash ./ci_scripts/deploy.sh
+    - echo "Application successfully deployed."
+  tags:
+    - backend-runner
+  only:
+    - master
+  environment: development
