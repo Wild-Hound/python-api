@@ -44,13 +44,11 @@ def create_url(db: Session, url: UrlSchema):
         return _url
 
     except exc.IntegrityError as e:
+        print("hello", e.__dict__["orig"])
         e = str(e)
         detail_start = e.find("DETAIL:") + len("DETAIL:")
         detail_end = e.find("\n", detail_start)
 
         detail_value = e[detail_start:detail_end].strip()
-        print(detail_value)
-        print(e)
 
         return detail_value
-    
