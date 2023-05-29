@@ -34,13 +34,7 @@ async def get_urls(skip: int = 0, limit: int = 100, db: Session = Depends(get_db
     return Response(code="200", message="Success fetch all data", result=_urls)
 
 
-@router.get("/main/{main_url}")
-async def get_main_url(main_url: str, db: Session = Depends(get_db)):
-    _url = urlCrud.get_url_by_main(db, main_url)
-    return Response(code="307", message="Success fetch all data", result=_url)
-
-
-@router.get("/redirect/{redirect_url}")
+@router.get("/{redirect_url}")
 async def get_main_url(redirect_url: str, response: FastResponse, db: Session = Depends(get_db)):
     _url = urlCrud.get_url_by_redirect(db, redirect_url)
     print(_url.main_url, redirect_url)

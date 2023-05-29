@@ -18,7 +18,7 @@ else:
 
 try:
     app = FastAPI()
-    app.include_router(urlRouter, prefix="/url_shortener", tags=["url"])
+    app.include_router(urlRouter, tags=["url"])
 except:
     logCritical("Failed to start service")
 else:
