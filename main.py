@@ -18,11 +18,6 @@ else:
 
 try:
     app = FastAPI()
-
-    @app.get("/")
-    async def home():
-        return "Hello World"
-
     app.include_router(urlRouter, prefix="/url_shortener", tags=["url"])
 except:
     logCritical("Failed to start service")

@@ -22,13 +22,13 @@ async def create_url(request: RequestUrl, response: FastResponse, db: Session = 
     if not res:
         response.status_code = 400
 
-        return Response(code="200",message="exists").dict(exclude_none=True)
+        return Response(code="200", message="exists").dict(exclude_none=True)
     return Response(
         code="200",
         message="Url created successfully").dict(exclude_none=True)
 
 
-@router.get("/")
+@router.get("/all")
 async def get_urls(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     _urls = urlCrud.get_urls(db, skip, limit)
     return Response(code="200", message="Success fetch all data", result=_urls)

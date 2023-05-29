@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, Date
-from config.slowConfig import Base
+from config.url_shortenerConfig import Base
 
 
 class Url(Base):
